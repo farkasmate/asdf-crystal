@@ -36,7 +36,14 @@ install_crystal() {
     architecture="universal"
   fi
 
-  local download_url="https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-1-${platform}-${architecture}.tar.gz"
+  local repo
+  repo="crystal-lang/crystal"
+
+  if [ "$platform" = "linux" ] && [ "$architecture" = "aarch64" ]; then
+    repo="farkasmate/crystal-arm64"
+  fi
+
+  local download_url="https://github.com/${repo}/releases/download/${version}/crystal-${version}-1-${platform}-${architecture}.tar.gz"
   local tmp_download_dir
   tmp_download_dir=$(mktemp -d -t crystal_tmp_XXXXXX)
   local source_path="${tmp_download_dir}/crystal.tar.gz"

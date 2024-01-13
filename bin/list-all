@@ -3,7 +3,21 @@
 set -eo pipefail
 
 cmd="curl --silent --location"
-releases_path="https://api.github.com/repos/crystal-lang/crystal/releases"
+repo="crystal-lang/crystal"
+
+case "$OSTYPE" in
+  darwin*) platform="darwin" ;;
+  linux*) platform="linux" ;;
+  *) fail "Unsupported platform" ;;
+esac
+
+architecture="$(uname -m)"
+
+if [ "$platform" = "linux" ] && [ "$architecture" = "aarch64" ]; then
+  repo="farkasmate/crystal-arm64"
+fi
+
+releases_path="https://api.github.com/repos/${repo}/releases"
 
 if [ -n "$GITHUB_API_TOKEN" ]; then
   cmd="$cmd --header 'Authorization: token $GITHUB_API_TOKEN'"
